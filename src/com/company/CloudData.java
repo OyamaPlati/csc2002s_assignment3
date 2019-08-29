@@ -34,11 +34,11 @@ public class CloudData {
 
             // input grid dimensions and simulation duration in timesteps
             dimt = sc.nextInt();
-            System.err.printf("Number of timesteps t = %d\n", dimt); // Lets see what we're actually getting from this file
+            //System.err.printf("t = %d\n", dimt); // Lets see what we're actually getting from this file
             dimx = sc.nextInt();
-            System.err.printf("Width x = %d\n", dimx); // Lets see what we're actually getting from this file
+            //System.err.printf("x = %d\n", dimx); // Lets see what we're actually getting from this file
             dimy = sc.nextInt();
-            System.err.printf("Height y = %d\n", dimy); // Lets see what we're actually getting from this file
+            //System.err.printf("y = %d\n", dimy); // Lets see what we're actually getting from this file
 
             // initialize and load advection (wind direction and strength) and convection
             advection = new Vector[dimt][dimx][dimy];
@@ -52,7 +52,7 @@ public class CloudData {
                         convection[t][x][y] = Float.parseFloat(sc.next().trim());
 
                         // Lets see what we're actually getting from this file
-                        System.err.printf("%f %f %f ", advection[t][x][y].getX(), advection[t][x][y].getY(), convection[t][x][y]);
+                        //System.err.printf("%f %f %f ", advection[t][x][y].getX(), advection[t][x][y].getY(), convection[t][x][y]);
                     }
                 }
                 System.err.printf("\n");
@@ -113,17 +113,17 @@ public class CloudData {
         for(int s = 0; s < dimt; s++){
             for(int a = 0; a < dimx; a++){
                 for(int b = 0; b < dimy; b++){
-                    System.err.printf("Adding x wind direction: %f\t", advection[s][a][b].getX());
+                    //System.err.printf("Adding x wind direction: %f\t", advection[s][a][b].getX());
                     sumX += advection[s][a][b].getX();
-                    System.err.printf("Adding y wind direction: %f\n", advection[s][a][b].getY());
+                    //System.err.printf("Adding y wind direction: %f\n", advection[s][a][b].getY());
                     sumY += advection[s][a][b].getY();
                 }
             }
 
-            System.err.printf("Timestep %d\n", s);
+            //System.err.printf("Timestep %d\n", s);
         }
 
-        System.err.printf("Total sums x = %f and y = %f\n", sumX, sumY);
+        //System.err.printf("Total sums x = %f and y = %f\n", sumX, sumY);
         xAverage = (float) sumX/dim();
         yAverage = (float)sumY/dim();
     }
@@ -135,44 +135,85 @@ public class CloudData {
                 for (int j = 0; j < dimy; j++) {
 
                     // find local average for each element in the air layer and classify
-                    float windMagnitude = localAverage(t, i, j);
+                    float localSumX = 0f;
+                    float localSumY = 0f;
+                    int numberOfNeighbours = 8;
+
+                    if (i==0 && j==0) {
+                        localSumX = advection[t][i][j].getX() + advection[t][i+1][j].getX() + advection[t][i][j+1].getX() +
+                                advection[t][i+1][j+1].getX();
+                        localSumY = advection[t][i][j].getY() + advection[t][i+1][j].getY() + advection[t][i][j+1].getY() +
+                                advection[t][i+1][j+1].getY();
+                    }
+                    else if (i==(dimx-1) && j==0) {
+                        localSumX = advection[t][i][j].getX() + advection[t][i-1][j].getX() + advection[t][i-1][j+1].getX() +
+                                advection[t][i][j+1].getX();
+                        localSumY = advection[t][i][j].getY() + advection[t][i-1][j].getY() + advection[t][i-1][j+1].getY() +
+                                advection[t][i][j+1].getY();
+
+                    }
+                    else if (i==(dimx-1) && j==(dimy-1)) {
+                        localSumX = advection[t][i][j].getX() + advection[t][i-1][j-1].getX() + advection[t][i][j-1].getX() +
+                                advection[t][i-1][j].getX();
+                        localSumY = advection[t][i][j].getY() + advection[t][i-1][j-1].getY() + advection[t][i][j-1].getY() +
+                                advection[t][i-1][j].getY();
+                    }
+                    else if (i==0 && j==(dimy-1)) {
+                        localSumX = advection[t][i][j].getX() + advection[t][i][j-1].getX() + advection[t][i+1][j-1].getX() +
+                                advection[t][i+1][j].getX();
+                        localSumY = advection[t][i][j].getY() + advection[t][i][j-1].getY() + advection[t][i+1][j-1].getY() +
+                                advection[t][i+1][j].getY();
+                    }
+                    else if (i==0 && ((j > 0) || (j < (dimy -1)))) {
+                        localSumX = advection[t][i][j].getX() + advection[t][i][j-1].getX() + advection[t][i+1][j-1].getX() +
+                                advection[t][i+1][j].getX() + advection[t][i+1][j+1].getX() + advection[t][i][j+1].getX();
+                        localSumY = advection[t][i][j].getY() + advection[t][i][j-1].getY() + advection[t][i+1][j-1].getY() +
+                                advection[t][i+1][j].getY() + advection[t][i+1][j+1].getY() + advection[t][i][j+1].getY();
+                    }
+                    else if (((i > 0) || (i < (dimx -1))) && j==0) {
+                        localSumX = advection[t][i][j].getX() + advection[t][i-1][j].getX() + advection[t][i+1][j].getX() +
+                                advection[t][i-1][j+1].getX() + advection[t][i][j+1].getX() + advection[t][i+1][j+1].getX();
+                        localSumY = advection[t][i][j].getY() + advection[t][i-1][j].getY() + advection[t][i+1][j].getY() +
+                                advection[t][i-1][j+1].getY() + advection[t][i][j+1].getY() + advection[t][i+1][j+1].getY();
+                    }
+                    else if (i==(dimx-1) && ((j > 0) || (j < (dimy -1)))) {
+                        localSumX = advection[t][i][j].getX() + advection[t][i][j-1].getX() + advection[t][i-1][j-1].getX() +
+                                advection[t][i-1][j].getX() + advection[t][i-1][j+1].getX() + advection[t][i][j+1].getX();
+                        localSumY = advection[t][i][j].getY() + advection[t][i][j-1].getY() + advection[t][i-1][j-1].getY() +
+                                advection[t][i-1][j].getY() + advection[t][i-1][j+1].getY() + advection[t][i][j+1].getY();
+                    }
+                    else {
+                        localSumX = advection[t][i-1][j-1].getX() + advection[t][i][j-1].getX() + advection[t][i+1][j-1].getX() +
+                                advection[t][i-1][j].getX() + advection[t][i][j].getX() + advection[t][i+1][j].getX() +
+                                advection[t][i-1][j+1].getX() + advection[t][i][j+1].getX() + advection[t][i+1][j+1].getX();
+                        localSumY = advection[t][i-1][j-1].getY() + advection[t][i][j-1].getY() + advection[t][i+1][j-1].getY() +
+                                advection[t][i-1][j].getY() + advection[t][i][j].getY() + advection[t][i+1][j].getY() +
+                                advection[t][i-1][j+1].getY() + advection[t][i][j+1].getY() + advection[t][i+1][j+1].getY();
+                    }
+
+                    float averageX = localSumX/numberOfNeighbours;
+                    float averageY = localSumY/numberOfNeighbours;
+
+                    float windMagnitude = (float)Math.sqrt(averageX*averageX + averageY*averageY);
 
                     // classify
-                    if (Math.abs(convection[t][i][j]) > Math.abs(windMagnitude)) {
+                    if (Math.abs(convection[t][i][j]) > windMagnitude) {
+                        //System.err.printf("CODE 0 - Absolute lift |u| = %f : Wind Magnitude W = %f\n", Math.abs(convection[t][i][j]), windMagnitude);
                         // Code 0 cumulus
                         classification[t][i][j] = 0;
-                    } else if (Math.abs(windMagnitude) > 0.2 || Math.abs(windMagnitude) >= Math.abs(convection[t][i][j])) {
+                    } else if (windMagnitude > 0.2) {
+                        //System.err.printf("CODE 1 - Wind Magnitude W = %f\n", windMagnitude);
                         // Code 1 striated stratus
                         classification[t][i][j] = 1;
 
                     } else {
+                        //System.err.printf("CODE 2\n");
                         // Code 2 armophous stratus
-                        classification[t][i][j] = 1;
+                        classification[t][i][j] = 2;
 
                     }
                 }
             }
         }
-    }
-
-    float localAverage(int t, int x, int y) {
-        // (x,y) local average neighbours W_ave i.e to each layer element
-        // formula result = sqrt(averageX^2, averageY^2)
-        float localSumX = 0f;
-        float localSumY = 0f;
-        int numberOfNeighbours = 0;
-
-        for (int i = Math.max(0,x-1); i < Math.min(dimx,x+2); i++) {
-            for (int j = Math.max(0, y-1); j < Math.min(dimy, y+2); j++) {
-                localSumX += advection[t][x][y].getX();
-                localSumY += advection[t][x][y].getY();
-                numberOfNeighbours++;
-            }
-        }
-
-        float averageX = localSumX/numberOfNeighbours;
-        float averageY = localSumY/numberOfNeighbours;
-
-        return (float)Math.sqrt(averageX*averageX + averageY*averageY);
-    }
+    } // End of subroutine classify
 }
