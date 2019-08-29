@@ -40,14 +40,16 @@ public class CloudData {
             // initialize and load advection (wind direction and strength) and convection
             advection = new Vector[dimt][dimx][dimy];
             convection = new float[dimt][dimx][dimy];
-            for(int t = 0; t < dimt; t++)
-                for(int x = 0; x < dimx; x++)
-                    for(int y = 0; y < dimy; y++){
+            for(int t = 0; t < dimt; t++) {
+                for (int x = 0; x < dimx; x++) {
+                    for (int y = 0; y < dimy; y++) {
                         advection[t][x][y] = new Vector();
                         advection[t][x][y].x = sc.nextFloat();
                         advection[t][x][y].y = sc.nextFloat();
                         convection[t][x][y] = sc.nextFloat();
                     }
+                }
+            }
 
             // load the classification codes for each layer element
             classification = new int[dimt][dimx][dimy];
@@ -114,29 +116,29 @@ public class CloudData {
 
     // calculate local average of 3x3 window for each i,j of this matrix and classification in code 0 or code 1 or code 2
     void classify () {
-        for(int t = 0; t < dimt; t++)
-            for(int i = 0; i < dimx; i++)
-                for(int j = 0; j < dimy; j++){
+        for(int t = 0; t < dimt; t++) {
+            for (int i = 0; i < dimx; i++) {
+                for (int j = 0; j < dimy; j++) {
 
                     // find local average for each element in the air layer and classify
-                    float windMagnitude = localAverage(t,i,j);
+                    float windMagnitude = localAverage(t, i, j);
 
                     // classify
-                    if ( Math.abs(convection[t][i][j]) > Math.abs(windMagnitude) ) {
+                    if (Math.abs(convection[t][i][j]) > Math.abs(windMagnitude)) {
                         // Code 0 cumulus
                         classification[t][i][j] = 0;
-                    }
-                    else if ( Math.abs(windMagnitude) > 0.2 || Math.abs(windMagnitude) >= Math.abs(convection[t][i][j]) ) {
+                    } else if (Math.abs(windMagnitude) > 0.2 || Math.abs(windMagnitude) >= Math.abs(convection[t][i][j])) {
                         // Code 1 striated stratus
                         classification[t][i][j] = 1;
 
-                    }
-                    else {
+                    } else {
                         // Code 2 armophous stratus
                         classification[t][i][j] = 1;
 
                     }
                 }
+            }
+        }
     }
 
     float localAverage(int t, int x, int y) {
