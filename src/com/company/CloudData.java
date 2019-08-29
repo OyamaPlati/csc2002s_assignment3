@@ -34,8 +34,11 @@ public class CloudData {
 
             // input grid dimensions and simulation duration in timesteps
             dimt = sc.nextInt();
+            System.err.printf("Number of timesteps t = %d\n", dimt); // Lets see what we're actually getting from this file
             dimx = sc.nextInt();
+            System.err.printf("Width x = %d\n", dimx); // Lets see what we're actually getting from this file
             dimy = sc.nextInt();
+            System.err.printf("Height y = %d\n", dimy); // Lets see what we're actually getting from this file
 
             // initialize and load advection (wind direction and strength) and convection
             advection = new Vector[dimt][dimx][dimy];
@@ -44,12 +47,18 @@ public class CloudData {
                 for (int x = 0; x < dimx; x++) {
                     for (int y = 0; y < dimy; y++) {
                         advection[t][x][y] = new Vector();
-                        advection[t][x][y].x = sc.nextFloat();
-                        advection[t][x][y].y = sc.nextFloat();
-                        convection[t][x][y] = sc.nextFloat();
+                        advection[t][x][y].setX(Float.parseFloat(sc.next().trim()));
+                        advection[t][x][y].setY(Float.parseFloat(sc.next().trim()));
+                        convection[t][x][y] = Float.parseFloat(sc.next().trim());
+
+                        // Lets see what we're actually getting from this file
+                        System.err.printf("%f %f %f ", advection[t][x][y].getX(), advection[t][x][y].getY(), convection[t][x][y]);
                     }
                 }
+                System.err.printf("\n");
             }
+
+            System.out.println();
 
             // load the classification codes for each layer element
             classification = new int[dimt][dimx][dimy];
@@ -101,15 +110,20 @@ public class CloudData {
     void prevailingWindAve() {
         float sumX = 0;
         float sumY = 0;
-        for(int t = 0; t < dimt; t++){
-            for(int x = 0; x < dimx; x++){
-                for(int y = 0; y < dimy; y++){
-                    sumX += advection[t][x][y].x;
-                    sumY += advection[t][x][y].y;
+        for(int s = 0; s < dimt; s++){
+            for(int a = 0; a < dimx; a++){
+                for(int b = 0; b < dimy; b++){
+                    System.err.printf("Adding x wind direction: %f\t", advection[s][a][b].getX());
+                    sumX += advection[s][a][b].getX();
+                    System.err.printf("Adding y wind direction: %f\n", advection[s][a][b].getY());
+                    sumY += advection[s][a][b].getY();
                 }
             }
+
+            System.err.printf("Timestep %d\n", s);
         }
 
+        System.err.printf("Total sums x = %f and y = %f\n", sumX, sumY);
         xAverage = (float) sumX/dim();
         yAverage = (float)sumY/dim();
     }
@@ -150,8 +164,8 @@ public class CloudData {
 
         for (int i = Math.max(0,x-1); i < Math.min(dimx,x+2); i++) {
             for (int j = Math.max(0, y-1); j < Math.min(dimy, y+2); j++) {
-                localSumX += advection[t][x][y].x;
-                localSumY += advection[t][x][y].y;
+                localSumX += advection[t][x][y].getX();
+                localSumY += advection[t][x][y].getY();
                 numberOfNeighbours++;
             }
         }
