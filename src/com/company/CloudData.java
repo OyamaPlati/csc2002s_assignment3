@@ -1,6 +1,7 @@
 package com.company;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -39,6 +40,7 @@ public class CloudData {
     void readData(String fileName){
         try{
             Scanner sc = new Scanner(new File(fileName), "UTF-8");
+            //sc.useLocale(Locale.US);
 
             // input grid dimensions and simulation duration in timesteps
             dimt = sc.nextInt();
@@ -80,7 +82,7 @@ public class CloudData {
             PrintWriter printWriter = new PrintWriter(fileWriter);
             printWriter.printf("%d %d %d\n", dimt, dimx, dimy);
             printWriter.printf("%f %f\n", x_ave, y_ave);
-
+            Locale.setDefault(Locale.CANADA);
             // write classifications
             for(int t = 0; t < dimt; t++){
                 for(int x = 0; x < dimx; x++){

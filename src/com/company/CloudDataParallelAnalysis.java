@@ -1,4 +1,5 @@
 package com.company;
+import java.util.Locale;
 import java.util.concurrent.ForkJoinPool;
 
 public class CloudDataParallelAnalysis {
@@ -30,6 +31,7 @@ public class CloudDataParallelAnalysis {
    }
    
    public static void main(String[] args) {
+      Locale.setDefault(Locale.CANADA);
       System.out.printf("Running Threaded Test\n");
       System.out.printf("Precision size of %d bits\n", Double.BYTES*8);
       String dataFile = args[0];

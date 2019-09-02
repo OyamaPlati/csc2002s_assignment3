@@ -1,4 +1,7 @@
 package com.company;
+
+import java.util.Locale;
+
 public class CloudDataAnalysis {
    static double xAverage, yAverage; // Prevailing wind average
    private static void prevailingWindAve (CloudData data) {
@@ -131,6 +134,7 @@ public class CloudDataAnalysis {
 	}
    
    public static void main (String args[]) {
+	    Locale.setDefault(Locale.CANADA);
       System.out.printf("Running Unthreaded Test\n");
       System.out.printf("Precision size of %d bits\n", Float.BYTES*8);
       String dataFile = args[0];
