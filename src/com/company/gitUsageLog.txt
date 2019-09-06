@@ -1,0 +1,45 @@
+commit 1c5cbb175b3761242c5bc4230d81bc704ff048a9 (HEAD -> master, origin/master, origin/HEAD)
+Author: OyamaPlati <platioyama@gmail.com>
+Date:   Fri Sep 6 20:34:30 2019 +0200
+
+    Added project report
+
+commit 28f37434b4a1249111e4e3c3c55d0abc3e4f4a60
+Author: OyamaPlati <37382583+OyamaPlati@users.noreply.github.com>
+Date:   Fri Sep 6 20:29:20 2019 +0200
+
+    Create makefile
+
+commit 6ae2e9a488a120468c9e0d27ee5dc9b1a17954a4
+Author: OyamaPlati <platioyama@gmail.com>
+Date:   Mon Sep 2 19:46:58 2019 +0200
+
+    Ran dataset benchmark
+
+commit bd3e0b41c6f1ef45ba297be405d6df95a09e83bf
+Merge: 8e06ddb 698edb3
+Author: OyamaPlati <platioyama@gmail.com>
+Date:   Mon Sep 2 14:50:21 2019 +0200
+
+    added final files
+
+commit 8e06ddbcb6d509162738eadfceea8f34b5fbb0c2
+Author: OyamaPlati <platioyama@gmail.com>
+Date:   Mon Sep 2 14:45:24 2019 +0200
+
+    Added all files
+
+commit 698edb3fa7243787545ae6e4cbb5fc32b9ae8fb9
+Author: OyamaPlati <platioyama@gmail.com>
+Date:   Sun Sep 1 08:32:26 2019 +0200
+
+    Added automarker file
+
+commit 9e5b9ee3aca192624e9e789ab79942a7612ba099
+Author: OyamaPlati <platioyama@gmail.com>
+Date:   Sat Aug 31 19:56:36 2019 +0200
+
+    Added parallel prevailing wind and classification
+
+commit af56c2bf64522465e63bed4a0c79acf32da36b6f
+Author: OyamaPlati <platioyama@gmail.com>
